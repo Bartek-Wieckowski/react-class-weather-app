@@ -1,5 +1,7 @@
 import React from 'react';
 import Input from './components/Input';
+import Spinner from './components/Spinner';
+import Weather from './components/Weather';
 class App extends React.Component {
   state = {
     location: '',
@@ -9,6 +11,8 @@ class App extends React.Component {
   };
 
   fetchWeather = async () => {
+    if (this.state.location.length < 2) return this.setState({ weather: {} });
+
     try {
       this.setState({
         isLoading: true,
@@ -56,11 +60,18 @@ class App extends React.Component {
   render() {
     return (
       <div className="app">
-        <h1>Check Weather!</h1>
+        {this.state.isLoading && <Spinner />}
+        <h1>Easy Check Weather!</h1>
         <Input
           location={this.state.location}
           onChangeLocation={this.setLocation}
         />
+        {this.state.weather.weathercode && (
+          <Weather
+            weather={this.state.weather}
+            location={this.state.displayLocation}
+          />
+        )}
       </div>
     );
   }
